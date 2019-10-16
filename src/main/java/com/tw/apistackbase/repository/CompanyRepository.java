@@ -2,10 +2,13 @@ package com.tw.apistackbase.repository;
 
 import com.tw.apistackbase.core.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface CompanyRepository extends JpaRepository<Company,Long> {
 
-    Company findCompanyByName(String name);
+    @Query("Select c from Company c where c.name = :name ")
+    Company findCompanyByName(@Param("name") String name);
 
-    Company findCompanyById(Long id);
+//    Company findCompanyById(Long id);
 }
