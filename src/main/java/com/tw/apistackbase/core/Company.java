@@ -1,8 +1,7 @@
 package com.tw.apistackbase.core;
 
-import org.hibernate.engine.internal.Cascade;
-
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Company {
@@ -12,6 +11,9 @@ public class Company {
 
     @OneToOne( cascade = CascadeType.ALL)
     private CompanyProfile profile;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Employee> employees;
 
     private String name;
 
@@ -44,5 +46,13 @@ public class Company {
 
     public void setProfile(CompanyProfile profile) {
         this.profile = profile;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 }
