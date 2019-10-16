@@ -1,7 +1,17 @@
 package com.tw.apistackbase.core;
 
+import org.hibernate.engine.internal.Cascade;
+
+import javax.persistence.*;
+
+@Entity
 public class Company {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @OneToOne( cascade = CascadeType.ALL)
+    private CompanyProfile profile;
 
     private String name;
 
@@ -26,5 +36,13 @@ public class Company {
 
     public Company(String name) {
         this.name = name;
+    }
+
+    public CompanyProfile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(CompanyProfile profile) {
+        this.profile = profile;
     }
 }
