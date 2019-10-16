@@ -30,4 +30,10 @@ public class CompanyController {
         companyRepository.deleteById(companyToDelete.getId());
         return ResponseEntity.ok("Employee/s has been deleted!");
     }
+
+    @PutMapping(value = "/{id}" , produces = {"application/json"})
+    public Company update (@PathVariable Long id , @RequestBody Company company) {
+        companyRepository.findById(id).ifPresent(company1 -> company.setId(id));
+        return companyRepository.save(company);
+    }
 }
