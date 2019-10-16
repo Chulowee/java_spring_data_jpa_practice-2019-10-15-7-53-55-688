@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface CompanyRepository extends JpaRepository<Company,Long> {
 
     @Query("Select c from Company c where c.name = :name ")
-    Company findCompanyByName(@Param("name") String name);
+    Optional<Company> findCompanyByName(@Param("name") String name);
 
 //    Company findCompanyById(Long id);
 }

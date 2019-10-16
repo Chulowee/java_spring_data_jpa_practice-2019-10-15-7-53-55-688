@@ -25,8 +25,12 @@ public class CompanyController {
 
     @GetMapping(value = "/{name}", produces = {"application/json"})
     @ResponseStatus(code = HttpStatus.OK)
-    public Company getCompanyByCompanyName(@PathVariable String name) {
-        return companyRepository.findCompanyByName(name);
+    public ResponseEntity<Optional<Company>> getCompanyByCompanyName(@PathVariable String name) {
+        Optional<Company> fetchedCompany = companyRepository.findCompanyByName(name);
+        if(fetchedCompany.isPresent()){
+            return new ResponseEntity<>(fetchedCompany, HttpStatus.OK);
+        }
+        return  new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(produces = {"application/json"})
@@ -35,11 +39,14 @@ public class CompanyController {
         return companyRepository.save(company)  ;
     }
 
-    @DeleteMapping(value = "/{name}", produces = {"application/json"})
-    public ResponseEntity<String> delete(@PathVariable String name) {
-        Company companyToDelete = companyRepository.findCompanyByName(name);
-        companyRepository.deleteById(companyToDelete.getId());
-        return ResponseEntity.ok("Employee/s has been deleted!");
+    @DeleteMapping(value = "/{id}", produces = {"application/json"})
+    public ResponseEntity<Optional<Company>> deleteCompanyByCompanyID (@PathVariable Long id) {
+        Optional<Company> fetchedCompany = companyRepository.findById(id);
+        if(fetchedCompany.isPresent()){
+            companyRepository.deleteById(id);
+            return new ResponseEntity<>(fetchedCompany, HttpStatus.OK);
+        }
+        return  new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
