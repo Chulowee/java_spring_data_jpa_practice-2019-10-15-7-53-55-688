@@ -9,8 +9,5 @@ import java.util.Optional;
 
 public interface CompanyRepository extends JpaRepository<Company,Long> {
 
-    @Query("Select c from Company c where c.name = :name ")
-    Optional<Company> findCompanyByName(@Param("name") String name);
-
-//    Company findCompanyById(Long id);
+    Optional<Company> findByNameContaining(String name) ;
 }

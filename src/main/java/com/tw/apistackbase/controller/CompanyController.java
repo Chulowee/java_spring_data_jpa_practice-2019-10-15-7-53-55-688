@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.GeneratedValue;
 import java.util.Optional;
 
 @RestController
@@ -17,16 +16,16 @@ public class CompanyController {
     private CompanyRepository companyRepository;
 
 
-    @GetMapping(produces = {"application/json"})
+    @GetMapping(value= "/all" , produces = {"application/json"})
     @ResponseStatus(code = HttpStatus.OK)
     public Iterable<Company> list() {
         return companyRepository.findAll();
     }
 
-    @GetMapping(value = "/{name}", produces = {"application/json"})
+    @GetMapping( produces = {"application/json"})
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Optional<Company>> getCompanyByCompanyName(@PathVariable String name) {
-        Optional<Company> fetchedCompany = companyRepository.findCompanyByName(name);
+    public ResponseEntity<Optional<Company>> getCompanyByCompanyName(@RequestParam String name) {
+        Optional<Company> fetchedCompany = companyRepository.findByNameContaining(name);
         if(fetchedCompany.isPresent()){
             return new ResponseEntity<>(fetchedCompany, HttpStatus.OK);
         }
