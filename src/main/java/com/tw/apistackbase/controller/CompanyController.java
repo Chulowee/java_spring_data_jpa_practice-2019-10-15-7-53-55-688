@@ -24,7 +24,8 @@ public class CompanyController {
 
     @GetMapping( produces = {"application/json"})
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Optional<Company>> getCompanyByCompanyName(@RequestParam String name) {
+    public ResponseEntity<Optional<Company>> getCompanyByCompanyName
+            (@RequestParam(required = false , defaultValue = "") String name) {
         Optional<Company> fetchedCompany = companyRepository.findByNameContaining(name);
         if(fetchedCompany.isPresent()){
             return new ResponseEntity<>(fetchedCompany, HttpStatus.OK);
