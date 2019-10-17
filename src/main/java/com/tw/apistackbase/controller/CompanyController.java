@@ -23,7 +23,7 @@ public class CompanyController {
     @GetMapping(value= "/all" , produces = {"application/json"})
     @ResponseStatus(code = HttpStatus.OK)
     public Iterable<Company> list(
-            @RequestParam(required = false , defaultValue = "0")  Integer page ,
+            @RequestParam(required = false , defaultValue = "1")  Integer page ,
             @RequestParam(required = false , defaultValue = "5")Integer size ) {
         return companyRepository.findAll(PageRequest.of(page,size, Sort.by("name").ascending()));
     }
