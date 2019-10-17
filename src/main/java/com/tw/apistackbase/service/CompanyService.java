@@ -15,7 +15,7 @@ public class CompanyService {
     private CompanyRepository companyRepository;
 
     public Iterable<Company> findAll(PageRequest name) {
-        return companyRepository.findAll();
+        return companyRepository.findAll(name);
     }
 
 

@@ -1,18 +1,14 @@
 package com.tw.apistackbase.controller;
 
 import com.tw.apistackbase.core.Company;
-import com.tw.apistackbase.repository.CompanyRepository;
 import com.tw.apistackbase.service.CompanyService;
-import jdk.internal.module.ModuleBootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.nio.cs.Surrogate;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
