@@ -62,8 +62,7 @@ class CompanyControllerTest {
         ResultActions result = mvc.perform(get("/companies/all"));
         //then
         result.andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)));
+                .andDo(print());
     }
 
     @Test
