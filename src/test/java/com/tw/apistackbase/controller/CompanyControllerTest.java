@@ -2,7 +2,6 @@ package com.tw.apistackbase.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tw.apistackbase.core.Company;
-import com.tw.apistackbase.repository.CompanyRepository;
 import com.tw.apistackbase.service.CompanyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Collections;
-import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
