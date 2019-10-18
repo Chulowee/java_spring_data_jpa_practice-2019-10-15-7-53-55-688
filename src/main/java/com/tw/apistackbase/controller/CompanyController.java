@@ -1,7 +1,9 @@
 package com.tw.apistackbase.controller;
 
+import com.tw.apistackbase.Handler.ControllerExceptionHandler;
 import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.service.CompanyService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -11,10 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
 
+    public static final String COMPANY_NOT_FOUND = "Company not found!";
     @Autowired
     private CompanyService companyService;
 
@@ -26,15 +32,15 @@ public class CompanyController {
         return companyService.findAll(PageRequest.of(page,size, Sort.by("name").ascending()));
     }
 
-    @GetMapping( produces = {"application/json"})
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Optional<Company>> getCompanyByCompanyName
-            (@RequestParam(required = false , defaultValue = "") String name) {
-        Optional<Company> fetchedCompany = companyService.findByNameContaining(name);
-        if(fetchedCompany.isPresent()){
+    public ResponseEntity<Company> getCompanyByCompanyName(@RequestParam(required = false , defaultValue = "") String name)
+            throws NotFoundException {
+        Company fetchedCompany = companyService.findByNameContaining(name);
+        if(!isNull(fetchedCompany)){
             return new ResponseEntity<>(fetchedCompany, HttpStatus.OK);
         }
-        return  new ResponseEntity<>( HttpStatus.NOT_FOUND);
+        throw new NotFoundException(COMPANY_NOT_FOUND);
     }
 
     @PostMapping(produces = {"application/json"})
@@ -44,17 +50,17 @@ public class CompanyController {
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
-    public ResponseEntity<Optional<Company>> deleteCompanyByCompanyID (@PathVariable Long id) {
+    public ResponseEntity<Optional<Company>> deleteCompanyByCompanyID (@PathVariable Long id) throws NotFoundException {
         Optional<Company> fetchedCompany = companyService.findById(id);
         if(fetchedCompany.isPresent()){
             companyService.deleteById(id);
             return new ResponseEntity<>(fetchedCompany, HttpStatus.OK);
         }
-        return  new ResponseEntity<>( HttpStatus.NOT_FOUND);
+        throw new NotFoundException("Cannot delete non existing Company!");
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
-    public ResponseEntity<Company> update(@PathVariable Long id, @RequestBody Company company) {
+    public ResponseEntity<Company> update(@PathVariable Long id, @RequestBody Company company) throws NotFoundException {
         Optional<Company> companyToUpdate = companyService.findById(id);
         if (companyToUpdate.isPresent()) {
             Company modifyCompany = companyToUpdate.get();
@@ -62,6 +68,6 @@ public class CompanyController {
             Company savedCompany = companyService.save(modifyCompany);
             return new ResponseEntity<>(savedCompany, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new NotFoundException("Cannot update non existing Company!");
     }
 }
