@@ -1,6 +1,5 @@
 package com.tw.apistackbase.controller;
 
-import com.tw.apistackbase.Handler.ControllerExceptionHandler;
 import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.service.CompanyService;
 import javassist.NotFoundException;
@@ -10,8 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 import static java.util.Objects.isNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
