@@ -20,15 +20,17 @@ public class CompanyService {
 
 
     public Company findByNameContaining(String name) {
-        return companyRepository.findByNameContaining(name).orElse(null);
+        return companyRepository.findByNameContaining(name)
+                .orElse(null);
     }
 
     public Company save(Company company) {
         return companyRepository.save(company);
     }
 
-    public Optional<Company> findById(Long id) {
-        return companyRepository.findById(id);
+    public Company findById(Long id) {
+        return companyRepository.findById(id)
+                .orElse(null);
     }
 
     public void deleteById(Long id) {
