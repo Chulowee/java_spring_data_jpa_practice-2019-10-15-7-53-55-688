@@ -20,7 +20,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/companies")
 public class CompanyController {
 
-    public static final String COMPANY_NOT_FOUND = "Company not found!";
+    private static final String COMPANY_NOT_FOUND = "Company not found!";
+    private static final String CANNOT_DELETE_NON_EXISTING_COMPANY = "Cannot delete non existing Company!";
+    private static final String CANNOT_UPDATE_NON_EXISTING_COMPANY = "Cannot update non existing Company!";
     @Autowired
     private CompanyService companyService;
 
@@ -43,31 +45,32 @@ public class CompanyController {
         throw new NotFoundException(COMPANY_NOT_FOUND);
     }
 
-    @PostMapping(produces = {"application/json"})
+    @PostMapping(produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
     public Company add(@RequestBody Company company) {
         return companyService.save(company)  ;
     }
 
-    @DeleteMapping(value = "/{id}", produces = {"application/json"})
-    public ResponseEntity<Optional<Company>> deleteCompanyByCompanyID (@PathVariable Long id) throws NotFoundException {
-        Optional<Company> fetchedCompany = companyService.findById(id);
-        if(fetchedCompany.isPresent()){
+    @DeleteMapping(produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Company> deleteCompanyByCompanyID(@RequestParam(required = false , defaultValue = "") long id)
+            throws NotFoundException {
+        Company fetchedCompany = companyService.findById(id);
+        if(!isNull(fetchedCompany)){
             companyService.deleteById(id);
             return new ResponseEntity<>(fetchedCompany, HttpStatus.OK);
         }
-        throw new NotFoundException("Cannot delete non existing Company!");
+        throw new NotFoundException(CANNOT_DELETE_NON_EXISTING_COMPANY);
     }
 
-    @PatchMapping(value = "/{id}", produces = {"application/json"})
-    public ResponseEntity<Company> update(@PathVariable Long id, @RequestBody Company company) throws NotFoundException {
-        Optional<Company> companyToUpdate = companyService.findById(id);
-        if (companyToUpdate.isPresent()) {
-            Company modifyCompany = companyToUpdate.get();
-            modifyCompany.setName(company.getName());
-            Company savedCompany = companyService.save(modifyCompany);
+    @PatchMapping(produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Company> update(@RequestParam(required = false , defaultValue = "") long id,
+                                          @RequestBody Company company) throws NotFoundException {
+        Company companyToUpdate = companyService.findById(id);
+        if (!isNull(companyToUpdate)) {
+            companyToUpdate.setName(company.getName());
+            Company savedCompany = companyService.save(companyToUpdate);
             return new ResponseEntity<>(savedCompany, HttpStatus.OK);
         }
-        throw new NotFoundException("Cannot update non existing Company!");
+        throw new NotFoundException(CANNOT_UPDATE_NON_EXISTING_COMPANY);
     }
 }
