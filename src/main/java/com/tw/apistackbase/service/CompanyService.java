@@ -19,8 +19,8 @@ public class CompanyService {
     }
 
 
-    public Optional<Company> findByNameContaining(String name) {
-        return companyRepository.findByNameContaining(name);
+    public Company findByNameContaining(String name) {
+        return companyRepository.findByNameContaining(name).orElse(null);
     }
 
     public Company save(Company company) {
